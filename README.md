@@ -36,14 +36,3 @@ Una vez que hayas iniciado el servidor de desarrollo, puedes seguir estos pasos:
 1. Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver el resultado en la aplicación.
 
 2. Puedes comenzar a editar la página modificando el archivo `app/page.js`. La página se actualizará automáticamente mientras editas el archivo.
-
-3. Este proyecto utiliza [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) para optimizar y cargar automáticamente Inter, una fuente personalizada de Google.
-
-## Aprende Más
-
-Para aprender más sobre Next.js, consulta los siguientes recursos:
-
-- [Documentación de Next.js](https://nextjs.org/docs) - aprende acerca de las características y la API de Next.js.
-- [Aprende Next.js](https://nextjs.org/learn) - un tutorial interactivo de Next.js.
-
-También puedes visitar el [repositorio de Next.js en GitHub](https://github.com/vercel/next.js/) - ¡tus comentarios y contribuciones son bienvenidos!

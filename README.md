@@ -1,6 +1,6 @@
 # Blog Repository
 
-Este es el repositorio del blog desarrollado con [Next.js](https://nextjs.org/), inicializado con [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Este es el repositorio del blog desarrollado con [Next.js](https://nextjs.org/), inicializado con [`npx create-next-app@latest`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Requisitos
 
@@ -23,11 +23,11 @@ yarn dev
 pnpm dev
 # o
 bun dev
+```
 
 ## Implementación en Netlify
 
 Este proyecto está actualmente implementado en Netlify. Puedes acceder a la versión en línea en [https://blogmas.netlify.app/](https://blogmas.netlify.app/).
-
 
 ## Uso
 

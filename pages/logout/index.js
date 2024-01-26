@@ -6,14 +6,14 @@ import { useRouter } from "next/router";
 const Index = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(3);
 
   useEffect(() => {
     const logoutAndRedirect = async () => {
       try {
         await dispatch(logout());
 
-        let seconds = 5;
+        let seconds = 3;
         const intervalId = setInterval(() => {
           seconds--;
           setCountdown(seconds);
@@ -22,7 +22,7 @@ const Index = () => {
         setTimeout(() => {
           clearInterval(intervalId);
           router.push("/");
-        }, 5000);
+        }, 3000);
       } catch (error) {
         console.error("Error logging out:", error);
       }

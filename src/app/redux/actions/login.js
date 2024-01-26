@@ -13,6 +13,7 @@ import {
   VERIFY_LOGIN_LOADING,
   VERIFY_LOGIN_SUCCESS,
 } from "@/app/redux/type/login";
+import { fnCreateUser } from "./user";
 
 /**
  * Initiates the authentication login process.
@@ -53,6 +54,7 @@ export function fnAuthLogin(userData) {
     try {
       const response = await clientAxios.post("/login/authenticate", userData);
       dispatch(authSuccessLogin(response.data.token));
+      return response.data.token;
     } catch (error) {
       toast.error("Tus datos fueron incorrectos, intente de nuevo.", {
         theme: "colored",
@@ -101,8 +103,10 @@ export function fnCreateLogin(userData) {
     try {
       const response = await clientAxios.post("/login/", userData);
       dispatch(createLoginSuccess(response.data));
+      return response.data;
     } catch (error) {
-      dispatch(createLoginError(error));
+      dispatch(createLoginError(error.message));
+      return Promise.reject(error);
     }
   };
 }
@@ -144,10 +148,64 @@ export function fnVerifyLogin(token) {
   return async (dispatch) => {
     dispatch(verifyLoginLoading());
     try {
-      const response = await clientAxios.get(`/login/verify-token?token=${token}`);
+      const response = await clientAxios.get(
+        `/login/verify-token?token=${token}`
+      );
       dispatch(verifyLoginSuccess(response.data));
+      return response.data;
     } catch (error) {
       dispatch(verifyLoginError(error));
+    }
+  };
+}
+
+/**
+ * Crea un nuevo usuario, lo autentica y verifica el login.
+ * @param {Object} userData Datos del usuario para crear la cuenta.
+ * @returns {Function} Redux thunk function.
+ */
+export function fnCompleteUserSignup(userData) {
+  return async (dispatch) => {
+    try {
+      const { email_user, password_user } = userData;
+
+      const createLogin = await dispatch(
+        fnCreateLogin({
+          user_login: email_user,
+          password_login: password_user,
+          id_role: 1,
+        })
+      );
+
+      const authResponse = await dispatch(
+        fnAuthLogin({
+          user_login: email_user,
+          password_login: password_user,
+        })
+      );
+
+      console.log("createLogin", createLogin);
+
+      if (authResponse) {
+        const validateToken = await dispatch(fnVerifyLogin(authResponse));
+        userData.id_login = validateToken.data.id;
+        userData.active_user = 1;
+        delete userData.password_user;
+        await dispatch(fnCreateUser(userData));
+      } else {
+        toast.error("Hubo un error, intente de nuevo.", {
+          theme: "colored",
+        });
+      }
+    } catch (error) {
+      toast.error(
+        error.response.status === 409
+          ? "El usuario ya esta registrado"
+          : "Hubo un error, intente de nuevo.",
+        {
+          theme: "colored",
+        }
+      );
     }
   };
 }

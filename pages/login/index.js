@@ -12,24 +12,15 @@ import InputField from "@/app/components/Input";
 import Header from "@/app/components/Header";
 import Button from "@/app/components/Button";
 
-
-
-
 const Login = () => {
-
   const dispatch = useDispatch();
-  const { loading, login } = useSelector(
-    (state) => state.login
-  );
+  const { loading, login } = useSelector((state) => state.login);
   const router = useRouter();
 
-
   useEffect(() => {
-    // Check if there's a token in the 'login' state or in sessionStorage
     const token = login || sessionStorage.getItem("login");
-    console.log("token", token)
     if (token) {
-      dispatch(fnVerifyLogin(token))
+      dispatch(fnVerifyLogin(token));
       router.push("/");
     }
   }, [login]);
@@ -90,7 +81,11 @@ const Login = () => {
                         />
                       </div>
                     ))}
-                    <Button type="submit" text="Iniciar Sesión" loading={loading.auth} />
+                    <Button
+                      type="submit"
+                      text="Iniciar Sesión"
+                      loading={loading.auth}
+                    />
                   </Form>
                 )}
               </Formik>

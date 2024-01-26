@@ -1,14 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import InputField from "@/app/components/Input";
 import Header from "@/app/components/Header";
 import Button from "@/app/components/Button";
 import { validationSchema } from "@/app/utils/Validation/register";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { formFields } from "@/app/utils/Forms/register";
+import { fnCompleteUserSignup, fnVerifyLogin } from "@/app/redux/actions/login";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const RegisterForm = () => {
+
+  const dispatch = useDispatch();
+  const { loading, login } = useSelector((state) => state.login);
+  const { user } = useSelector((state) => state.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = login || sessionStorage.getItem("login");
+    if (token && Object.keys(user).length > 0) {
+      router.push("/");
+    }
+  }, [login, user]);
+
   return (
     <>
       <Header />
@@ -44,7 +60,7 @@ const RegisterForm = () => {
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                  console.log("Registro con:", values);
+                  dispatch(fnCompleteUserSignup(values));
                   setSubmitting(false);
                 }}
               >
@@ -67,7 +83,7 @@ const RegisterForm = () => {
                         />
                       </div>
                     ))}
-                    <Button type="submit" text="Registrarse" />
+                    <Button type="submit" text="Registrarse" loading={loading.create} />
                   </Form>
                 )}
               </Formik>

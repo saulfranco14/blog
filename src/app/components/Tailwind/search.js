@@ -1,11 +1,18 @@
-import { useState } from "react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { filterOptions } from "@/app/utils/Filters";
+import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { fnVerifyLogin } from "@/app/redux/actions/login";
 
 const SearchBar = ({ onSearch, onFilter }) => {
+  const dispatch = useDispatch();
+
   const [query, setQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(filterOptions[0]);
   const [showFilters, setShowFilters] = useState(false);
+
+  const { profile, login } = useSelector((state) => state.login);
 
   const handleSearch = () => {
     onSearch(query);
@@ -16,6 +23,11 @@ const SearchBar = ({ onSearch, onFilter }) => {
     onFilter(filter.value);
     setShowFilters(false);
   };
+
+  useEffect(() => {
+    const token = login || sessionStorage.getItem("login");
+    if (token) dispatch(fnVerifyLogin(token));
+  }, []);
 
   return (
     <>
@@ -35,7 +47,7 @@ const SearchBar = ({ onSearch, onFilter }) => {
             <MagnifyingGlassIcon className="h-5 w-5" />
           </button>
         </div>
-        <div className="relative w-full sm:w-auto">
+        <div className="relative w-full flex-col gap-0 sm:w-auto sm:flex-row flex sm:gap-5">
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="bg-indigo-500 px-4 py-2 my-4 rounded-lg flex items-center text-white w-full sm:w-auto"
@@ -60,6 +72,15 @@ const SearchBar = ({ onSearch, onFilter }) => {
                 </div>
               ))}
             </div>
+          )}
+          {Object.keys(profile).length > 0 && (
+            <Link
+              href="/blog/create"
+              className="bg-indigo-500 px-4 py-2 my-4 rounded-lg flex items-center text-white w-full sm:w-auto"
+            >
+              <PlusIcon className="h-5 w-5 mr-2" />
+              Crear Contenido
+            </Link>
           )}
         </div>
       </div>

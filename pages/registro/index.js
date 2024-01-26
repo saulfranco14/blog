@@ -3,8 +3,10 @@ import Link from "next/link";
 import React from "react";
 import InputField from "@/app/components/Input";
 import Header from "@/app/components/Header";
+import Button from "@/app/components/Button";
 import { validationSchema } from "@/app/utils/Validation/register";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { formFields } from "@/app/utils/Forms/register";
 
 const RegisterForm = () => {
   return (
@@ -47,67 +49,25 @@ const RegisterForm = () => {
                 }}
               >
                 {({ errors, touched }) => (
-                  <Form className="p-2 space-y-4">
-                    <Field
-                      as={InputField}
-                      label="Nombre"
-                      name="name_user"
-                      placeholder="Escribe tu nombre"
-                      error={touched.name_user && errors.name_user}
-                    />
-                    <ErrorMessage
-                      name="name_user"
-                      component="div"
-                      className="text-red-500 text-sm"
-                    />
-
-                    <Field
-                      as={InputField}
-                      label="Telefono celular"
-                      name="phone_user"
-                      placeholder="Escribe tu télefono celular"
-                      error={touched.phone_user && errors.phone_user}
-                    />
-                    <ErrorMessage
-                      name="phone_user"
-                      component="div"
-                      className="text-red-500 text-sm"
-                    />
-
-                    <Field
-                      as={InputField}
-                      label="Email"
-                      type="email"
-                      name="email_user"
-                      placeholder="Escribe tu email"
-                      error={touched.email_user && errors.email_user}
-                    />
-                    <ErrorMessage
-                      name="email_user"
-                      component="div"
-                      className="text-red-500 text-sm"
-                    />
-
-                    <Field
-                      as={InputField}
-                      label="Contraseña"
-                      type="password"
-                      name="password_user"
-                      placeholder="Escribe tu contraseña"
-                      error={touched.password_user && errors.password_user}
-                    />
-                    <ErrorMessage
-                      name="password_user"
-                      component="div"
-                      className="text-red-500 text-sm"
-                    />
-
-                    <button
-                      type="submit"
-                      className="w-full bg-indigo-500 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                    >
-                      Registrarse
-                    </button>
+                  <Form className="space-y-4">
+                    {formFields.map((field) => (
+                      <div key={field.name} className="py-2">
+                        <Field
+                          as={InputField}
+                          label={field.label}
+                          name={field.name}
+                          placeholder={field.placeholder}
+                          type={field.type}
+                          error={touched[field.name] && errors[field.name]}
+                        />
+                        <ErrorMessage
+                          name={field.name}
+                          component="div"
+                          className="text-red-500 text-sm"
+                        />
+                      </div>
+                    ))}
+                    <Button type="submit" text="Registrarse" />
                   </Form>
                 )}
               </Formik>

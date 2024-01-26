@@ -1,17 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import InputField from "@/app/components/Input";
 import Header from "@/app/components/Header";
+import Button from "@/app/components/Button";
+import { validationSchema } from "@/app/utils/Validation/login";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { formFields } from "@/app/utils/Forms/login";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Login con:", email, password);
-  };
   return (
     <>
       <Header />
@@ -38,30 +35,40 @@ const Login = () => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Inicio de Sesión
               </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-                <InputField
-                  label="Email"
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Escribe tu email"
-                />
-                <InputField
-                  label="contraseña"
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Escribe tu contraseña"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-indigo-800 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Iniciar Sesión
-                </button>
-              </form>
+              <Formik
+                initialValues={{
+                  user_login: "",
+                  password_login: "",
+                }}
+                validationSchema={validationSchema}
+                onSubmit={(values, { setSubmitting }) => {
+                  console.log("Registro con:", values);
+                  setSubmitting(false);
+                }}
+              >
+                {({ errors, touched }) => (
+                  <Form className="space-y-4">
+                    {formFields.map((field) => (
+                      <div key={field.name} className="py-2">
+                        <Field
+                          as={InputField}
+                          label={field.label}
+                          name={field.name}
+                          placeholder={field.placeholder}
+                          type={field.type}
+                          error={touched[field.name] && errors[field.name]}
+                        />
+                        <ErrorMessage
+                          name={field.name}
+                          component="div"
+                          className="text-red-500 text-sm"
+                        />
+                      </div>
+                    ))}
+                    <Button type="submit" text="Iniciar Sesión" />
+                  </Form>
+                )}
+              </Formik>
             </div>
           </div>
           <div className="mt-4 text-center">

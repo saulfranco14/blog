@@ -111,7 +111,12 @@ export function fnAllBlogEntries() {
     try {
       // Make POST request to the API with the provided data as the request body
       const response = await clientAxios.get(`/blog-entries/`);
-      dispatch(successAllBlogEntries(response.data));
+
+      const sortedBlogEntries = response.data.sort((a, b) => {
+        return new Date(b.publication_blog_entries) - new Date(a.publication_blog_entries);
+      });
+
+      dispatch(successAllBlogEntries(sortedBlogEntries));
     } catch (error) {
       // Dispatch error action and display an alert
       console.error("Error: ", error);

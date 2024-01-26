@@ -3,7 +3,8 @@ import Header from "@/app/components/Header";
 import SearchBar from "@/app/components/Tailwind/search";
 import { useDispatch, useSelector } from "react-redux";
 import { fnAllBlogEntries } from "@/app/redux/actions/blogEntrie";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { filterBlogEntries } from "@/app/utils/Filters";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -11,23 +12,40 @@ export default function Home() {
   const { profile } = useSelector((state) => state.login);
   const { allBlogEntries } = useSelector((state) => state.blogEntrie);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("content");
+
   const handleSearch = (query) => {
-    console.log(`Realizar búsqueda con query: ${query}`);
+    setSearchQuery(query.toLowerCase());
   };
 
-  const handleFilter = (filter) => {
-    console.log(`Aplicar filtro por: ${filter}`);
+  const handleFilter = (selectedFilter) => {
+    setFilter(selectedFilter);
+  };
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setFilter("content");
   };
 
   useEffect(() => {
     dispatch(fnAllBlogEntries());
   }, []);
 
+  const filteredBlogEntries = allBlogEntries.filter((entry) =>
+    filterBlogEntries(entry, filter, searchQuery)
+  );
+
   return (
     <>
       <Header profile={profile} />
-      <SearchBar onSearch={handleSearch} onFilter={handleFilter} />
-      <Cards data={allBlogEntries} />
+      <SearchBar
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+        clearFilters={clearFilters}
+        searchQuery={searchQuery}
+      />
+      <Cards data={filteredBlogEntries} />
     </>
   );
 }

@@ -35,7 +35,6 @@ const BlogEntrie = () => {
                   validationSchema={validationSchema}
                   onSubmit={(values, { setSubmitting }) => {
                     values.id_login = profile.data.id;
-                    console.log("values", values);
                     dispatch(fnCreateBlogEntrie(values));
                     setSubmitting(false);
                     router.push("/");

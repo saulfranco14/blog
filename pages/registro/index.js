@@ -1,20 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import InputField from "@/app/components/Input";
 import Header from "@/app/components/Header";
-
+import { validationSchema } from "@/app/utils/Validation/register";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 
 const RegisterForm = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Registro con:", name, email, password);
-  };
-
   return (
     <>
       <Header />
@@ -41,47 +33,84 @@ const RegisterForm = () => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Registro
               </h1>
-              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-                <InputField
-                  label="Nombre"
-                  type="text"
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Escribe tu nombre"
-                />
-                <InputField
-                  label="Telefono celular"
-                  type="text"
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Escribe tu télefono celular"
-                />
+              <Formik
+                initialValues={{
+                  name_user: "",
+                  phone_user: "",
+                  email_user: "",
+                  password_user: "",
+                }}
+                validationSchema={validationSchema}
+                onSubmit={(values, { setSubmitting }) => {
+                  console.log("Registro con:", values);
+                  setSubmitting(false);
+                }}
+              >
+                {({ errors, touched }) => (
+                  <Form className="p-2 space-y-4">
+                    <Field
+                      as={InputField}
+                      label="Nombre"
+                      name="name_user"
+                      placeholder="Escribe tu nombre"
+                      error={touched.name_user && errors.name_user}
+                    />
+                    <ErrorMessage
+                      name="name_user"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
 
-                <InputField
-                  label="Email"
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Escribe tu email"
-                />
-                <InputField
-                  label="Contraseña"
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Escribe tu contraseña"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-indigo-800 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Registrarse
-                </button>
-              </form>
+                    <Field
+                      as={InputField}
+                      label="Telefono celular"
+                      name="phone_user"
+                      placeholder="Escribe tu télefono celular"
+                      error={touched.phone_user && errors.phone_user}
+                    />
+                    <ErrorMessage
+                      name="phone_user"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+
+                    <Field
+                      as={InputField}
+                      label="Email"
+                      type="email"
+                      name="email_user"
+                      placeholder="Escribe tu email"
+                      error={touched.email_user && errors.email_user}
+                    />
+                    <ErrorMessage
+                      name="email_user"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+
+                    <Field
+                      as={InputField}
+                      label="Contraseña"
+                      type="password"
+                      name="password_user"
+                      placeholder="Escribe tu contraseña"
+                      error={touched.password_user && errors.password_user}
+                    />
+                    <ErrorMessage
+                      name="password_user"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+
+                    <button
+                      type="submit"
+                      className="w-full bg-indigo-500 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    >
+                      Registrarse
+                    </button>
+                  </Form>
+                )}
+              </Formik>
             </div>
           </div>
           <div className="mt-4 text-center">

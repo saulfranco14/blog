@@ -1,14 +1,30 @@
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import InputField from "@/app/components/Input";
-import Header from "@/app/components/Header";
-import Button from "@/app/components/Button";
+import { useRouter } from "next/router";
 import { validationSchema } from "@/app/utils/Validation/login";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { formFields } from "@/app/utils/Forms/login";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { fnAuthLogin, fnVerifyLogin } from "@/app/redux/actions/login";
+import InputField from "@/app/components/Input";
+import Header from "@/app/components/Header";
+import Button from "@/app/components/Button";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const { loading, login } = useSelector((state) => state.login);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = login || sessionStorage.getItem("login");
+    if (token) {
+      dispatch(fnVerifyLogin(token));
+      router.push("/");
+    }
+  }, [login]);
+
   return (
     <>
       <Header />
@@ -42,7 +58,7 @@ const Login = () => {
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                  console.log("Registro con:", values);
+                  dispatch(fnAuthLogin(values));
                   setSubmitting(false);
                 }}
               >
@@ -65,7 +81,11 @@ const Login = () => {
                         />
                       </div>
                     ))}
-                    <Button type="submit" text="Iniciar Sesión" />
+                    <Button
+                      type="submit"
+                      text="Iniciar Sesión"
+                      loading={loading.auth}
+                    />
                   </Form>
                 )}
               </Formik>

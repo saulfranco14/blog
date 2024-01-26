@@ -24,7 +24,6 @@ const BlogEntrie = () => {
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                  console.log("Registro con:", values);
                   setSubmitting(false);
                 }}
               >

@@ -1,24 +1,13 @@
-import { applyMiddleware } from "redux";
-import { legacy_createStore as createStore} from 'redux'
-import thunk                            from "redux-thunk";
-import { composeWithDevTools }          from '@redux-devtools/extension';
-import { createWrapper }                from "next-redux-wrapper";
-import rootReducer                      from '@/redux/reducers';
+import { configureStore } from "@reduxjs/toolkit";
+import { createWrapper } from "next-redux-wrapper";
+import rootReducer from "@/app/redux/reducers";
 
-// initial states here
-const initalState = {};
+const makeStore = () =>
+  configureStore({
+    reducer: rootReducer,
+    devTools: process.env.NODE_ENV !== "production",
+  });
 
-// middleware
-const middleware = [thunk];
+const wrapper = createWrapper(makeStore);
 
-// creating store
-export const store = createStore(
-    rootReducer,
-    initalState,
-    composeWithDevTools(applyMiddleware(...middleware))
-);
-
-// assigning store to next wrapper
-const makeStore = () => store;
-
-export const wrapper = createWrapper(makeStore);
+export { wrapper };

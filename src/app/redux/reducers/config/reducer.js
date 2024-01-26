@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import { combineReducers } from '@reduxjs/toolkit';
 import loginReducer from "../login";
 import userReducer from "../user";
 import blogEntrieReducer from "../blogEntrie";

@@ -1,19 +1,15 @@
 import Cards from "@/app/components/Tailwind/cards";
 import Header from "@/app/components/Header";
 import SearchBar from "@/app/components/Tailwind/search";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fnVerifyLogin } from "@/app/redux/actions/login";
+import { fnAllBlogEntries } from "@/app/redux/actions/blogEntrie";
+import { useEffect } from "react";
 
 export default function Home() {
-  
   const dispatch = useDispatch();
-  const { login } = useSelector((state) => state.login);
 
-  useEffect(() => {
-    const token = login || sessionStorage.getItem("login");
-    if (token) dispatch(fnVerifyLogin(token));
-  }, [login]);
+  const { profile } = useSelector((state) => state.login);
+  const { allBlogEntries } = useSelector((state) => state.blogEntrie);
 
   const handleSearch = (query) => {
     console.log(`Realizar búsqueda con query: ${query}`);
@@ -23,11 +19,15 @@ export default function Home() {
     console.log(`Aplicar filtro por: ${filter}`);
   };
 
+  useEffect(() => {
+    dispatch(fnAllBlogEntries());
+  }, []);
+
   return (
     <>
-      <Header />
+      <Header profile={profile} />
       <SearchBar onSearch={handleSearch} onFilter={handleFilter} />
-      <Cards />
+      <Cards data={allBlogEntries} />
     </>
   );
 }

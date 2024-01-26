@@ -1,20 +1,10 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { fnVerifyLogin } from "@/app/redux/actions/login";
 
-export default function NavigationLinks({ router }) {
-  const dispatch = useDispatch();
-  const { profile, login } = useSelector((state) => state.login);
-
-  useEffect(() => {
-    const token = login || sessionStorage.getItem("login");
-    if (token) dispatch(fnVerifyLogin(token));
-  }, [login]);
-
+export default function NavigationLinks({ router, profile }) {
   return (
     <div className="flex flex-1 items-center justify-end gap-x-6">
-      {Object.keys(profile).length > 0 ? (
+      {profile && Object.keys(profile).length > 0 ? (
         <>
           <Link
             href="/blog/create"

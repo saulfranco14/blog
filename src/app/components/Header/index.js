@@ -5,7 +5,7 @@ import NavigationLinks from "./NavigationLinks";
 import MobileMenuButton from "./MobileMenuButton";
 import MobileMenu from "./MobileMenu";
 
-export default function Header() {
+export default function Header({ profile }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
 
@@ -16,7 +16,7 @@ export default function Header() {
         aria-label="Global"
       >
         <Logo />
-        <NavigationLinks router={router} />
+        <NavigationLinks router={router} profile={profile} />
         <MobileMenuButton onClick={() => setMobileMenuOpen(true)} />
       </nav>
       {mobileMenuOpen && (

@@ -1,4 +1,6 @@
 import clientAxios from "@/app/config/axios";
+import { toast } from "react-toastify";
+
 import {
   AUTH_LOGIN_ERROR,
   AUTH_LOGIN_LOADING,
@@ -50,8 +52,11 @@ export function fnAuthLogin(userData) {
     dispatch(initAuthLogin());
     try {
       const response = await clientAxios.post("/login/authenticate", userData);
-      dispatch(authSuccessLogin(response.data));
+      dispatch(authSuccessLogin(response.data.token));
     } catch (error) {
+      toast.error("Tus datos fueron incorrectos, intente de nuevo.", {
+        theme: "colored",
+      });
       dispatch(authErrorLogin(error));
     }
   };
@@ -139,7 +144,7 @@ export function fnVerifyLogin(token) {
   return async (dispatch) => {
     dispatch(verifyLoginLoading());
     try {
-      const response = await clientAxios.post("/login/verify-token", token);
+      const response = await clientAxios.get(`/login/verify-token?token=${token}`);
       dispatch(verifyLoginSuccess(response.data));
     } catch (error) {
       dispatch(verifyLoginError(error));

@@ -2,7 +2,7 @@
 const nextConfig = {
   env: {
     API_KEY: process.env.API_KEY,
-    APIB_LOG: process.env.API_BLOG
+    API_BLOG: process.env.API_BLOG
   },
 };
 

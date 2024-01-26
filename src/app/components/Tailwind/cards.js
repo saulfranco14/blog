@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { format, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
 
 export default function Cards({ data }) {
   return (
@@ -34,7 +36,11 @@ export default function Cards({ data }) {
                       dateTime={post.publication_blog_entries}
                       className="text-gray-500"
                     >
-                      {post.publication_blog_entries}
+                      {format(
+                        parseISO(post.publication_blog_entries),
+                        "PPPpp",
+                        { locale: es }
+                      )}
                     </time>
                   </div>
                   <div className="group relative max-w-xl">
@@ -52,9 +58,14 @@ export default function Cards({ data }) {
                         href="/blog/create"
                         className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-lg font-semibold text-white"
                       >
-                        {post &&
-                          post.title_blog_entries.charAt(0).toUpperCase()}
+                        {post && post.name_user.charAt(0).toUpperCase()}
                       </Link>
+                      <div className="text-sm leading-6">
+                        <p className="font-semibold text-gray-900">
+                          <span className="absolute inset-0" />
+                          {post.name_user}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

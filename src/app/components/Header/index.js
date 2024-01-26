@@ -19,7 +19,9 @@ export default function Header() {
         <NavigationLinks router={router} />
         <MobileMenuButton onClick={() => setMobileMenuOpen(true)} />
       </nav>
-      {mobileMenuOpen && <MobileMenu onClose={() => setMobileMenuOpen(false)} />}
+      {mobileMenuOpen && (
+        <MobileMenu onClose={() => setMobileMenuOpen(false)} />
+      )}
     </header>
   );
 }

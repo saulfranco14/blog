@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { fnVerifyLogin } from "@/app/redux/actions/login";
 
-const SearchBar = ({ onSearch, onFilter }) => {
+const SearchBar = ({ onSearch, onFilter, clearFilters, searchQuery }) => {
   const dispatch = useDispatch();
 
   const [query, setQuery] = useState("");
@@ -24,6 +24,12 @@ const SearchBar = ({ onSearch, onFilter }) => {
     setShowFilters(false);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   useEffect(() => {
     const token = login || sessionStorage.getItem("login");
     if (token) dispatch(fnVerifyLogin(token));
@@ -38,6 +44,7 @@ const SearchBar = ({ onSearch, onFilter }) => {
             placeholder="Buscar..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyPress}
             className="border p-2 rounded-l-lg w-full sm:w-80"
           />
           <button
@@ -72,6 +79,14 @@ const SearchBar = ({ onSearch, onFilter }) => {
                 </div>
               ))}
             </div>
+          )}
+          {searchQuery && (
+            <button
+              onClick={clearFilters}
+              className="bg-indigo-500 px-4 py-2 my-4 rounded-lg flex items-center text-white w-full sm:w-auto"
+              >
+              Limpiar filtros
+            </button>
           )}
           {Object.keys(profile).length > 0 && (
             <Link

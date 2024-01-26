@@ -184,8 +184,6 @@ export function fnCompleteUserSignup(userData) {
         })
       );
 
-      console.log("createLogin", createLogin);
-
       if (authResponse) {
         const validateToken = await dispatch(fnVerifyLogin(authResponse));
         userData.id_login = validateToken.data.id;
